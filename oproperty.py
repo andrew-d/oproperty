@@ -137,15 +137,15 @@ class oproperty(object):
 
         # Find this class in the MRO.
         for pos in range(len(mro)):
-                if mro[pos] == self.__class_type:
-                        break
+            if mro[pos] == self.__class_type:
+                break
 
         # Look through classes higher in the MRO for this attribute.
         for pos in range(pos + 1, len(mro)):
-                tmp = mro[pos]
+            tmp = mro[pos]
 
-                if isinstance(tmp, type) and name in tmp.__dict__:
-                    return tmp.__dict__[name]
+            if isinstance(tmp, type) and name in tmp.__dict__:
+                return tmp.__dict__[name]
 
         return None
 
