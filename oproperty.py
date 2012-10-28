@@ -125,12 +125,12 @@ class oproperty(object):
             mro = obj.__class__.__mro__
 
         # Find this class in the MRO.
-        for pos in xrange(len(mro)):
+        for pos in range(len(mro)):
                 if mro[pos] == self.__class_type:
                         break
 
         # Look through classes higher in the MRO for this attribute.
-        for pos in xrange(pos + 1, len(mro)):
+        for pos in range(pos + 1, len(mro)):
                 tmp = mro[pos]
 
                 if isinstance(tmp, type) and name in tmp.__dict__:
