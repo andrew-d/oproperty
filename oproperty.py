@@ -138,6 +138,10 @@ class oproperty(object):
 
         return None
 
+    def getter(self, fget):
+        self.fget = fget
+        return self
+
     def setter(self, fset):
         self.fset = fset
         return self
