@@ -125,15 +125,48 @@ class oproperty(object):
         """
         self.__class_type = klass
 
+    def _handle_undecorated(self, an_object, mro):
+        # We walk the MRO chain looking for ourself in the attributes
+        # somewhere.  This is helpful because we can try and pinpoint
+        # exactly what class is undecorated.
+        parent_klass = None
+
+        for klass in mro:
+            # Look through the dict.
+            for name, val in klass.__dict__.items():
+                # If this is ourself...
+                if val is self:
+                    # Cool, we found it.
+                    parent_klass = klass
+                    break
+
+            if parent_klass is not None:
+                break
+
+        if parent_klass:
+            raise RuntimeError(
+                "You must decorate the class '{0}' with " \
+                "property_overriding!".format(parent_klass.__name__)
+            )
+        else:
+            raise RuntimeError(
+                "A class in the inheritance chain belonging to {0!r} hasn't " \
+                "been decorated with property_overriding.".format(an_object)
+            )
+
     def _get_super_attribute(self, obj, name):
-        if self.__class_type is None:
-            raise RuntimeError("You must decorate class!")
+        # Handle the None case.
+        if obj is None:
+            return None
 
         # Get the MRO for the object
         if isinstance(obj, type):
             mro = obj.__mro__
         else:
             mro = obj.__class__.__mro__
+
+        if self.__class_type is None:
+            self._handle_undecorated(obj, mro)
 
         # Find this class in the MRO.
         for pos in range(len(mro)):
