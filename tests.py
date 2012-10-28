@@ -203,6 +203,21 @@ class TestMiscellaneous(BaseTestCase):
         del d2.prop
         self.assert_equal(d2.prop, 99)
 
+    # NOTE: This fails, since I haven't decided what to do in this case yet.
+    # def test_with_no_base(self):
+    #     class BaseClass(object):
+    #         pass
+    #
+    #     @property_overriding
+    #     class Derived(BaseClass):
+    #         @oproperty
+    #         def prop(self, orig):
+    #             print(repr(orig))
+    #             return orig() + 1
+    #
+    #     d = Derived()
+    #     print(d.prop)
+
 
 def suite():
     suite = unittest.TestSuite()

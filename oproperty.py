@@ -45,6 +45,17 @@ class oproperty(object):
 
         Q: What versions of Python does this work on?
         A: This should work on Python 2.6+, including Python 3.
+
+    TODO:
+        - Unsure what I want to do to deal with the case where the base
+          property doesn't actually exist.  Options are currently:
+            - Make the orig parameter a kwarg, and only pass it if the base
+              property actually exists
+            - The orig lambda can return a None if the base prop doesn't exist
+            - Verify when the class type is set that there is an attribute
+              with the appropriate name somewhere in the __mro__.  This would
+              throw a RuntimeError(?) if we then try and override a property
+              that doesn't already exist.
     """
 
     def __init__(self, fget=None, fset=None, fdel=None, doc=None, name=None):
