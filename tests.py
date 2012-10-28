@@ -180,6 +180,29 @@ class TestMiscellaneous(BaseTestCase):
         with self.assert_raises(RuntimeError):
             v = d.prop
 
+    def test_classmethods(self):
+        @property_overriding
+        class Derived1(BaseClass):
+            @oproperty.override_setter
+            def prop(self, val, orig):
+                orig(val + 100)
+
+        @property_overriding
+        class Derived2(BaseClass):
+            @oproperty.override_deleter
+            def prop(self, orig):
+                orig()
+                self.prop = 99
+
+        d1 = Derived1()
+        d2 = Derived2()
+
+        d1.prop = 444
+        self.assert_equal(d1.prop, 544)
+
+        del d2.prop
+        self.assert_equal(d2.prop, 99)
+
 
 def suite():
     suite = unittest.TestSuite()

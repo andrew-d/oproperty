@@ -103,7 +103,7 @@ class oproperty(object):
         # If we have an attribute, call and return it.  Otherwise, we simply
         # call the base property's __delete__ function.
         if self.fdel is not None:
-            return self.fdel(obj, lambda val: super_attr.__delete__(obj))
+            return self.fdel(obj, lambda: super_attr.__delete__(obj))
         else:
             return super_attr.__delete__(obj)
 
@@ -149,6 +149,33 @@ class oproperty(object):
     def deleter(self, fdel):
         self.fdel = fdel
         return self
+
+    @classmethod
+    def override_setter(klass, fset, **kwargs):
+        """
+        This is a convenience classmethod that lets you quickly override just
+        the setter of a property, like so:
+            class Derived(BaseClass):
+                @oproperty.override_setter
+                def prop(self, val, orig):
+                    # Do new setter work...
+                    pass
+        """
+        return klass(fset=fset, **kwargs)
+
+    @classmethod
+    def override_deleter(klass, fdel, **kwargs):
+        """
+        This is a convenience classmethod that lets you quickly override just
+        the deleter of a property, like so:
+            class Derived(BaseClass):
+                @oproperty.override_deleter
+                def prop(self, orig):
+                    # Do new deleter work...
+                    pass
+        """
+        return klass(fdel=fdel, **kwargs)
+
 
 
 def property_overriding(klass):
